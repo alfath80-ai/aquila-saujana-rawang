@@ -1,0 +1,11 @@
+# My TV's changes, one per line. check.sh puts them back if an update undoes them:
+#   sh check.sh <TV_IP> --fix my-tv.txt
+#
+# Animations off: the TV feels much faster.
+global window_animation_scale 0
+global transition_animation_scale 0
+global animator_duration_scale 0
+#
+# Apps turned off during the cleanup go here, like:
+#   off com.example.bloatware
+# Ask Claude to fill this in from the changes it made.
