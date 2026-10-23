@@ -1,61 +1,59 @@
 # My Android TV
 
-My own copy of [tv-detox](https://github.com/Ansub/tv-detox) (MIT, by Ansub Khan),
-customized for my TV. See [README.md](README.md) for the full upstream docs.
+My own copy of [CleanYourTV](https://github.com/Gathin23/cleanyourtv) (MIT, by Gathin), taken at
+upstream commit `0cd7c27` (23 Oct 2026). See [README.md](README.md) for the full upstream docs and
+[PROMPT.md](PROMPT.md) for the procedure the AI assistant follows.
 
-## What's different from upstream
+Left out from upstream: the maintainer's PR review bot workflow (it needs their API keys and would run
+every 6 hours here) and their sponsor button. Everything else is unchanged.
 
-- **apps.txt**: YouTube, Netflix, Prime Video and Disney+ on the top row.
-  Hulu and Max are dropped (not available in Malaysia). Any other TV apps
-  installed (Astro GO, Viu, iQIYI, unifi TV…) are added after these.
-- **my-tv.txt**: my list of changes, so `check.sh --fix my-tv.txt` puts them
-  back after a system update.
+## Before you start
 
-## Important: run it from a laptop at home
-
-The TV can only be controlled from a computer on the **same Wi-Fi** as the TV.
-Claude in the cloud or the Claude phone app can't reach it. Use
-[Claude Code](https://claude.com/claude-code) on a laptop at home.
+- **Use a laptop at home.** The TV can only be controlled from a computer on the **same Wi-Fi** as the
+  TV. Claude in the cloud or the Claude phone app can't reach it. Use
+  [Claude Code](https://claude.com/claude-code) on the laptop.
+- **The laptop needs:** Python 3, `adb` (Android platform tools), Java 17 and the Android SDK to build
+  the home screen. Installing [Android Studio](https://developer.android.com/studio) gives you the SDK
+  and Java in one go. The assistant can help install these.
+- **The TV needs Android 8 or newer.** Older TVs get the cleanup only, not the new home screen.
 
 ## Steps
 
-1. On the TV: **Settings → Device Preferences → About**, press **Build** 7 times.
-   Then in **Developer options** turn on **USB debugging** (and **Network/Wireless
-   debugging** if you see it).
-2. Find the TV's IP: **Settings → Network & Internet →** your Wi-Fi.
-3. On the laptop, clone this repo and open Claude Code in it:
+1. On the TV: **Settings → Device Preferences → About**, press OK on **Build** 7 times. Go back to
+   **Developer options** and turn on **USB debugging** (and **Network/ADB debugging** or
+   **Wireless debugging** if you see it).
+2. On the laptop:
    ```sh
    git clone https://github.com/alfath80-ai/aquila-saujana-rawang
    cd aquila-saujana-rawang
+   git checkout claude/android-tv-customization-8zm0p6
    claude
    ```
-4. Paste this (fill in the brackets):
+3. Paste this into Claude Code (fill in the brackets):
    ```text
-   Help me clean up my Android TV and make it faster.
-   My TV is a <brand and model>, at IP <TV_IP>.
+   I cloned the CleanYourTV repo; this folder is my copy of it. Read AGENTS.md, then follow
+   PROMPT.md exactly on my real TV, reusing tools/ and launcher/.
 
-   1. Connect to my TV over Wi-Fi. Walk me through anything I need to tap on the TV.
-   2. Before changing anything, list every app in plain English: safe to turn off,
-      needed by the TV, and apps I use. Check free memory.
-   3. Ask me before every change. Turn apps off instead of deleting them.
-      Write each change to my-tv.txt.
-   4. Never turn off: Google Play services (com.google.android.gms), Google Play,
-      Settings, System UI, setup apps, the keyboard, Bluetooth, my HDMI inputs,
-      the TV's input and tuner framework, or anything else the TV needs to start.
-      Keep casting (Chromecast built-in) on. If you're not sure, leave it on.
-   5. Install the home screen: run sh install.sh <TV_IP> "" "bluetooth,sound,picture"
-   6. Turn off animations and the screensaver, and make the TV sleep after 5 minutes.
-   7. Wait 30 seconds after the last change, then restart the TV once and check it
-      starts up normally. Show me free memory before and after.
+   My TV model is: <brand and model>. It's in Malaysia.
+   Apps I use: <e.g. YouTube, Netflix, Prime Video, Disney+ Hotstar, Astro GO, Viu, unifi TV>.
+   Keep Chromecast/casting on.
+
+   Before building the launcher, run `gradle wrapper --gradle-version 8.9` in launcher/
+   (or check gradle-wrapper.jar's checksum against Gradle's official one) so the build uses
+   the official Gradle wrapper.
+
+   When we're done, switch off USB and network debugging, reboot, and confirm with
+   tools/adb-closed.py that the port is closed.
    ```
+4. Answer its checklist questions on the TV and in the chat: which apps you use, how many dock slots
+   and in what order, and whether to keep the voice assistant, Chromecast and firmware updates.
 
 ## Later
 
-```sh
-sh check.sh <TV_IP> --fix my-tv.txt   # after a TV update
-sh undo.sh <TV_IP>                    # back to the TV's own home screen
-```
-
-Change the apps on the home screen with the remote: hold **OK** on an app.
-
-Upstream version: tv-detox `52644cd`.
+- **Undo everything:** `TV_HOST=<TV_IP> tools/restore.sh <the debloat list it used>` (see README,
+  "Restore").
+- **Change the dock or look:** edit `launcher/app/src/main/res/values/config.xml` and run
+  `launcher/build-and-install.sh`, or push a theme from `themes/` with `tools/theme.sh`.
+- **After a TV update:** see "Firmware updates" in README.md. Some updates switch apps back on.
+- **Updating from upstream:** wait for a version that's been out a while rather than taking every
+  change. The project is new and changes quickly.
