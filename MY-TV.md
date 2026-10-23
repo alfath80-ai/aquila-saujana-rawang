@@ -51,9 +51,9 @@ every 6 hours here) and their sponsor button. Everything else is unchanged.
 ## Later
 
 - **Undo everything:** `TV_HOST=<TV_IP> tools/restore.sh <the debloat list it used>` (see README,
-  "Restore").
+  "Restoring your TV").
 - **Change the dock or look:** edit `launcher/app/src/main/res/values/config.xml` and run
   `launcher/build-and-install.sh`, or push a theme from `themes/` with `tools/theme.sh`.
-- **After a TV update:** see "Firmware updates" in README.md. Some updates switch apps back on.
+- **After a TV update:** see "After a firmware update" in README.md. Some updates switch apps back on.
 - **Updating from upstream:** wait for a version that's been out a while rather than taking every
   change. The project is new and changes quickly.
