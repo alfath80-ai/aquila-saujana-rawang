@@ -47,6 +47,8 @@ every 6 hours here) and their sponsor button. Everything else is unchanged.
    - The remote's Home button sends ALL_APPS, so install the launcher with
      HOME_KEY_SERVICE=1 TV_HOST=<tv ip> launcher/build-and-install.sh, every time, and have me
      press the real Home button to check it.
+   - I'm on Windows: use the PowerShell twins of the scripts (README, "Windows (PowerShell)"),
+     e.g. launcher\build-and-install.ps1 -TvHost <tv ip> -HomeKeyService.
    - Keep firmware updates and the Mi Cast receiver on.
 
    Before building the launcher, run `gradle wrapper --gradle-version 8.9` in launcher/
