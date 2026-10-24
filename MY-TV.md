@@ -19,7 +19,7 @@ every 6 hours here) and their sponsor button. Everything else is unchanged.
 
 ## Steps
 
-1. On the TV: **Settings → Device Preferences → About**, press OK on **Build** 7 times. Go back to
+1. Already done on your stick. On the TV: **Settings → Device Preferences → About**, press OK on **Build** 7 times. Go back to
    **Developer options** and turn on **USB debugging** (and **Network/ADB debugging** or
    **Wireless debugging** if you see it).
 2. On the laptop:
@@ -34,9 +34,20 @@ every 6 hours here) and their sponsor button. Everything else is unchanged.
    I cloned the CleanYourTV repo; this folder is my copy of it. Read AGENTS.md, then follow
    PROMPT.md exactly on my real TV, reusing tools/ and launcher/.
 
-   My TV model is: <brand and model>. It's in Malaysia.
+   My TV is a Xiaomi Mi TV Stick, model MiTV-AESP0 (aquaman), Android TV 9, in Malaysia.
+   Its IP is <tv ip>. Developer options and USB debugging are already on.
    Apps I use: <e.g. YouTube, Netflix, Prime Video, Disney+ Hotstar, Astro GO, Viu, unifi TV>.
-   Keep Chromecast/casting on.
+
+   This model has a tested list: examples/xiaomi-mitv-aesp0/debloat.txt. Read its header first,
+   check my firmware against it (`tools/tv.py --probe`), and go through the list with me before
+   applying it: comment out anything I use.
+   - Keep Chromecast/casting on. The list disables setupwraith, which costs casting, so comment
+     that line out. If Home then opens the setup wizard instead of the new launcher, stop and
+     ask me before disabling it.
+   - The remote's Home button sends ALL_APPS, so install the launcher with
+     HOME_KEY_SERVICE=1 TV_HOST=<tv ip> launcher/build-and-install.sh, every time, and have me
+     press the real Home button to check it.
+   - Keep firmware updates and the Mi Cast receiver on.
 
    Before building the launcher, run `gradle wrapper --gradle-version 8.9` in launcher/
    (or check gradle-wrapper.jar's checksum against Gradle's official one) so the build uses
